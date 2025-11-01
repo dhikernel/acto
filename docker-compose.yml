@@ -1,0 +1,48 @@
+#version: "3.7"
+volumes:
+  setup_pgdata:
+services:
+  setup_postgres:
+    container_name: setup_postgres
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=diego
+      - POSTGRES_PASSWORD=12345678
+      - POSTGRES_DB=setup
+    volumes:
+      - setup_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - laravel
+  setup_site:
+    container_name: setup_site
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      # opcional: você pode montar um arquivo local.ini para ajustar php.ini
+      # - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini:ro
+    ports:
+      - "9000:9000"
+    depends_on:
+      - setup_postgres
+    networks:
+      - laravel
+  setup_nginx:
+    container_name: 'setup_nginx'
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+        - "8989:80"
+    volumes:
+        - ./:/var/www
+        - ./docker/nginx/:/etc/nginx/conf.d/
+    networks:
+        - laravel
+networks:
+    laravel:
+        driver: bridge
