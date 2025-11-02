@@ -321,6 +321,15 @@ acto/
 - **API RESTful**: Endpoints para integração com outros sistemas
 - **Banco Geoespacial**: PostgreSQL com extensão PostGIS
 
+### 📁 Arquivos de Exemplo para Teste
+
+No diretório `example-files/` estão disponíveis dois arquivos GeoJSON para teste via painel do Filament:
+
+- **`exemplo-ponto-sao-paulo.json`**: Arquivo de exemplo contendo dados de ponto georreferenciado de São Paulo
+- **`exemplo-poligono-belem.json`**: Arquivo de exemplo contendo dados de polígono georreferenciado de Belém
+
+Estes arquivos podem ser utilizados para testar a funcionalidade de upload de dados geoespaciais através do painel administrativo.
+
 ## 🔧 Solução de Problemas
 
 ### Erros Comuns de Instalação
@@ -470,7 +479,3 @@ git push origin feature/AmazingFeature
 ## 📄 Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
-
-## 📞 Suporte
-
-Para suporte técnico ou dúvidas sobre o projeto, entre em contato através dos canais oficiais da equipe de desenvolvimento.
