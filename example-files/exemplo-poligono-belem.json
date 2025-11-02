@@ -1,0 +1,17 @@
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Polígono de Exemplo - Belém",
+    "description": "Um polígono de exemplo representando uma área em Belém - PA"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [-48.5100, -1.4450],
+      [-48.4950, -1.4450],
+      [-48.4950, -1.4600],
+      [-48.5100, -1.4600],
+      [-48.5100, -1.4450]
+    ]]
+  }
+}
