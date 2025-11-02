@@ -22,16 +22,44 @@ git clone git@github.com:dhikernel/acto.git
 cd acto
 ```
 
-### 2. Configuração do Ambiente
+### 2. Verificar Estrutura Docker
 
-#### 2.1. Arquivo de Ambiente
+⚠️ **IMPORTANTE**: Antes de prosseguir, certifique-se de que a estrutura Docker está completa:
+
+```bash
+# Verificar se os diretórios existem
+ls -la docker/
+```
+
+Você deve ver:
+- `docker/php/` - contendo o Dockerfile do PHP
+- `docker/nginx/` - contendo as configurações do Nginx
+
+Se os diretórios não existirem, crie-os:
+```bash
+mkdir -p docker/php docker/nginx
+```
+
+**Arquivos necessários:**
+
+1. **docker/php/Dockerfile** - deve conter PHP 8.4 com extensões necessárias:
+   - `intl` (para Filament)
+   - `zip` (para OpenSpout)
+   - `pdo_pgsql` (para PostgreSQL)
+   - `gd`, `mbstring`, `bcmath`, etc.
+
+2. **docker/nginx/default.conf** - configuração do servidor web
+
+### 3. Configuração do Ambiente
+
+#### 3.1. Arquivo de Ambiente
 Copie o arquivo de exemplo e configure as variáveis de ambiente:
 
 ```bash
 cp .env.example .env
 ```
 
-#### 2.2. Configure as Variáveis de Ambiente
+#### 3.2. Configure as Variáveis de Ambiente
 Edite o arquivo `.env` com as seguintes configurações:
 
 ```env
@@ -60,14 +88,28 @@ QUEUE_CONNECTION=database
 MAIL_MAILER=log
 ```
 
-### 3. Inicialização com Docker
+### 4. Inicialização com Docker
 
-#### 3.1. Construir e Iniciar os Containers
+#### 4.1. Construir e Iniciar os Containers
+
+⚠️ **ATENÇÃO**: Use `--build` na primeira execução para garantir que todas as extensões PHP sejam instaladas:
+
 ```bash
 docker compose up -d --build
 ```
 
-#### 3.2. Verificar Status dos Containers
+**Possíveis erros e soluções:**
+
+1. **Erro: "no such file or directory: docker/"**
+   - Certifique-se de que criou a estrutura Docker no passo 2
+
+2. **Erro: "ext-intl * -> it is missing"**
+   - O Dockerfile deve incluir `libicu-dev` e `intl`
+
+3. **Erro: "ext-zip * -> it is missing"**
+   - O Dockerfile deve incluir `libzip-dev` e `zip`
+
+#### 4.2. Verificar Status dos Containers
 ```bash
 docker compose ps
 ```
@@ -77,9 +119,9 @@ Você deve ver 3 containers rodando:
 - `setup_site` (PHP-FPM)
 - `setup_nginx` (Nginx)
 
-### 4. Configuração da Aplicação Laravel
+### 5. Configuração da Aplicação Laravel
 
-#### 4.1. Instalar Dependências PHP
+#### 5.1. Instalar Dependências PHP
 ```bash
 docker compose exec setup_site bash
 ```
@@ -92,7 +134,7 @@ composer install
 php artisan key:generate
 ```
 
-#### 4.2. Configurar Banco de Dados
+#### 5.2. Configurar Banco de Dados
 ```bash
 php artisan migrate
 ```
@@ -101,7 +143,7 @@ php artisan migrate
 php artisan db:seed
 ```
 
-#### 4.3. Instalar Dependências Frontend
+#### 5.3. Instalar Dependências Frontend
 ```bash
 npm install
 ```
@@ -115,7 +157,7 @@ Para desenvolvimento (com watch):
 npm run dev
 ```
 
-#### 4.4. Configurar Permissões
+#### 5.4. Configurar Permissões
 ```bash
 chmod -R 775 storage bootstrap/cache
 ```
@@ -124,14 +166,14 @@ chmod -R 775 storage bootstrap/cache
 chown -R www-data:www-data storage bootstrap/cache
 ```
 
-#### 4.5. Sair do Container
+#### 5.5. Sair do Container
 ```bash
 exit
 ```
 
-### 5. Configuração do Filament (Admin Panel)
+### 6. Configuração do Filament (Admin Panel)
 
-#### 5.1. Criar Usuário Administrador
+#### 6.1. Criar Usuário Administrador
 ```bash
 docker compose exec setup_site bash
 ```
@@ -277,6 +319,62 @@ acto/
 - **Banco Geoespacial**: PostgreSQL com extensão PostGIS
 
 ## 🔧 Solução de Problemas
+
+### Erros Comuns de Instalação
+
+#### 1. Erro: "lstat /home/.../docker: no such file or directory"
+
+**Causa**: Diretório `docker/` não existe no projeto.
+
+**Solução**:
+```bash
+# Criar estrutura necessária
+mkdir -p docker/php docker/nginx
+
+# Verificar se foi criado
+ls -la docker/
+```
+
+#### 2. Erro: "ext-intl * -> it is missing from your system"
+
+**Causa**: Extensão PHP `intl` não instalada no container.
+
+**Solução**: Verificar se o `docker/php/Dockerfile` contém:
+```dockerfile
+# Instalar dependências para intl
+libicu-dev \
+
+# Configurar e instalar extensão
+&& docker-php-ext-configure intl \
+&& docker-php-ext-install ... intl
+```
+
+#### 3. Erro: "ext-zip * -> it is missing from your system"
+
+**Causa**: Extensão PHP `zip` não instalada no container.
+
+**Solução**: Verificar se o `docker/php/Dockerfile` contém:
+```dockerfile
+# Instalar dependências para zip
+libzip-dev \
+
+# Instalar extensão
+&& docker-php-ext-install ... zip
+```
+
+#### 4. Erro: "composer install" falha
+
+**Causa**: Extensões PHP necessárias não estão disponíveis.
+
+**Solução**:
+```bash
+# Reconstruir container com todas as extensões
+docker compose down
+docker compose up -d --build --force-recreate
+
+# Verificar extensões instaladas
+docker compose exec setup_site php -m | grep -E "(intl|zip|pdo_pgsql)"
+```
 
 ### Container não inicia
 
