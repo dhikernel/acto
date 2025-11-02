@@ -15,12 +15,35 @@ class EditLayer extends EditRecord
 {
     protected static string $resource = LayerResource::class;
 
+    public function getTitle(): string
+    {
+        return 'Editar Camada';
+    }
+
+    public function getBreadcrumb(): string
+    {
+        return 'Editar';
+    }
+
     protected function getHeaderActions(): array
     {
         return [
-            DeleteAction::make(),
-            ForceDeleteAction::make(),
-            RestoreAction::make(),
+            DeleteAction::make()
+                ->label('Excluir'),
+            ForceDeleteAction::make()
+                ->label('Excluir Permanentemente'),
+            RestoreAction::make()
+                ->label('Restaurar'),
+        ];
+    }
+
+    protected function getFormActions(): array
+    {
+        return [
+            $this->getSaveFormAction()
+                ->label('Salvar Alterações'),
+            $this->getCancelFormAction()
+                ->label('Cancelar'),
         ];
     }
 

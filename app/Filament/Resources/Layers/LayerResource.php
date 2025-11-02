@@ -20,6 +20,12 @@ class LayerResource extends Resource
 {
     protected static ?string $model = Layer::class;
 
+    /**
+     * Label used by Filament for this resource (singular and plural).
+     */
+    protected static ?string $label = 'Camada';
+    protected static ?string $pluralLabel = 'Camadas';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema
@@ -44,7 +50,7 @@ class LayerResource extends Resource
         return [
             'index' => ListLayers::route('/'),
             'create' => CreateLayer::route('/create'),
-            'edit' => EditLayer::route('/{record}/edit'),
+            'edit' => EditLayer::route('/{record}/editar'),
         ];
     }
 
