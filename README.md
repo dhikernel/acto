@@ -144,6 +144,9 @@ php artisan db:seed
 ```
 
 #### 5.3. Instalar Dependências Frontend
+
+> **⚠️ Observação**: Certifique-se de que o Node.js esteja na versão 22.x para garantir compatibilidade com as dependências do projeto.
+
 ```bash
 npm install
 ```
