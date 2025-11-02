@@ -22,3 +22,134 @@
 }
 
 @variant dark (&:where(.dark, .dark *));
+
+/* Estilos específicos para o mapa */
+.map-container {
+    height: 100vh;
+    width: 100%;
+    position: relative;
+}
+
+.map-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.layers-panel {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+    z-index: 1000;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.layer-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.layer-item:hover {
+    background-color: #f9f9f9;
+}
+
+.layer-checkbox {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.layer-name {
+    font-weight: 500;
+    color: #333;
+    flex: 1;
+    cursor: pointer;
+}
+
+.layer-type {
+    font-size: 12px;
+    color: #666;
+    background: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 8px;
+}
+
+.layers-panel h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+    border-bottom: 2px solid #e5e5e5;
+    padding-bottom: 8px;
+}
+
+/* Estilos para o popup das camadas */
+.layer-popup {
+    font-family: 'Instrument Sans', Arial, sans-serif;
+}
+
+.popup-section {
+    margin-bottom: 15px;
+}
+
+.popup-section h4 {
+    margin: 0 0 8px 0;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 4px;
+    font-size: 16px;
+}
+
+.popup-section p {
+    margin: 4px 0;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .layers-panel {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        max-height: 40vh;
+    }
+    
+    .map-loading {
+        padding: 15px;
+        margin: 0 20px;
+    }
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.layers-panel {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.layer-item {
+    animation: fadeIn 0.2s ease-in-out;
+}
