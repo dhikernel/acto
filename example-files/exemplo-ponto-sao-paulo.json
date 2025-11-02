@@ -1,0 +1,11 @@
+{
+  "type": "Feature",
+  "properties": {
+    "name": "Ponto Central - São Paulo",
+    "description": "Um ponto representando o centro de São Paulo (Catedral da Sé)"
+  },
+  "geometry": {
+    "type": "Point",
+    "coordinates": [-46.6339, -23.5505]
+  }
+}
